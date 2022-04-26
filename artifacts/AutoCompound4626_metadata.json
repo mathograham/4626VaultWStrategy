@@ -437,7 +437,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "assets",
+						"name": "lpAmt",
 						"type": "uint256"
 					},
 					{
@@ -982,7 +982,7 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "assets",
+						"name": "lpAmt",
 						"type": "uint256"
 					},
 					{
@@ -1036,11 +1036,11 @@
 	},
 	"sources": {
 		"AutoCompound4626.sol": {
-			"keccak256": "0xfd2bb311e96127e1811ca43d78f9da963be1b1b3e75acd504d5ca59e394b0ab7",
+			"keccak256": "0x446e28f88b58571ea2b221c17649fc091f4d4617bc84326c33edda3bf0372eba",
 			"license": "AGPL-3.0-only",
 			"urls": [
-				"bzz-raw://3236c50f5daecfea95d993131bb5f503abc9c5a2dd503a369810efb0230b9b1b",
-				"dweb:/ipfs/QmPi3SHf4ax6mo3daybQSArrxdAav2uVvJ1PHf3tmUbmCX"
+				"bzz-raw://1c8cd5fc224ecb955db8b6e3486ae3baba9911c3a9cb4b923bb501d4de5f69ce",
+				"dweb:/ipfs/QmZtaAcL6cK86MMNzcmJG4LikHAeo9LWagzVyLHg5RtYw8"
 			]
 		},
 		"IMasterChefJoe.sol": {
@@ -1074,11 +1074,11 @@
 			]
 		},
 		"VaultStandard.sol": {
-			"keccak256": "0x08bc764dda119fec7514c2697b92dde67c10636ca755862d2458e6a6c9caa167",
+			"keccak256": "0x439839e2400154038bace19116a9d38dbaa4c82fb0e412b68a54a2c10a28b772",
 			"license": "AGPL-3.0-only",
 			"urls": [
-				"bzz-raw://b4873a2b115871138cc381ca8207063be43ab2d99600b459327eebac9c5f6ad3",
-				"dweb:/ipfs/QmUt3RVNbeNK3mEcXdwPXxqkmGzTBfUR7vyhfVSCcTdBrH"
+				"bzz-raw://e80048fa5026a83d55ae5247b6e5135f79d6de66f175f94b4bfce79b1d563e12",
+				"dweb:/ipfs/QmPSt2hpbHuoRSFhEqhgi9Q4XDEjjxTEMJEcxpQpBEmSJq"
 			]
 		},
 		"https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC20.sol": {

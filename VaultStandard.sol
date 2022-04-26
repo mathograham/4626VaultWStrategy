@@ -49,7 +49,7 @@ import {FixedPointMathLib} from "https://github.com/Rari-Capital/solmate/blob/ma
     //function takes in specified amount of assets and first transfers asset to contract, then mints 
     //corresponding amount of shares to specified receiver
     //note share amount is rounded down
-    function deposit(uint256 assets, address receiver) public returns (uint256 shares) {
+    function deposit(uint256 assets, address receiver) public virtual returns (uint256 shares) {
         // Check for rounding error since we round down in previewDeposit. 
         require((shares = previewDeposit(assets)) != 0, "ZERO_SHARES");
 
@@ -87,7 +87,7 @@ import {FixedPointMathLib} from "https://github.com/Rari-Capital/solmate/blob/ma
         uint256 assets,
         address receiver,
         address owner
-    ) public returns (uint256 shares) {
+    ) public virtual returns (uint256 shares) {
         shares = previewWithdraw(assets); // No need to check for rounding error, previewWithdraw rounds up.
         //checks to see if msg.sender owner. If not, must check to see how much of owner's balance msg.sender allowed to use
         if (msg.sender != owner) {

@@ -20,6 +20,7 @@ import "./IMasterChefJoe.sol";
 
 contract AutoCompound4626 is ERC4626 {
     using SafeMath for uint;
+    using SafeTransferLib for ERC20;
 
     //keeps track of the total amount of LP tokens deposited in stakingContract
     uint public totalDeposits;
@@ -77,9 +78,52 @@ contract AutoCompound4626 is ERC4626 {
     }
 
     function totalAssets() public override view returns (uint256) {
-        uint stakingAssetBalance = stakingContract.userInfo(PID, address(this)).amount;
+        // uint stakingAssetBalance = stakingContract.userInfo(PID, address(this)).amount;
         uint contractAssetBalance = asset.balanceOf(address(this));
-    return stakingAssetBalance.add(contractAssetBalance);
+    return totalDeposits.add(contractAssetBalance);
+    }
+
+    function deposit(uint256 lpAmt, address receiver) public override returns (uint256 shares) {
+        // Check for rounding error since we round down in previewDeposit. 
+        require((shares = previewDeposit(lpAmt)) != 0, "ZERO_SHARES");
+
+        // Need to transfer before minting or ERC777s could reenter.
+        asset.safeTransferFrom(msg.sender, address(this), lpAmt);
+
+        _stakeLp(lpAmt);
+
+        _mint(receiver, shares);
+
+        totalDeposits = totalDeposits.add(lpAmt);
+
+        emit Deposit(msg.sender, receiver, lpAmt, shares);
+
+        afterDeposit(lpAmt, shares);
+    }
+
+    function withdraw(
+        uint256 lpAmt,
+        address receiver,
+        address owner
+    ) public override returns (uint256 shares) {
+        shares = previewWithdraw(lpAmt); // No need to check for rounding error, previewWithdraw rounds up.
+        //checks to see if msg.sender owner. If not, must check to see how much of owner's balance msg.sender allowed to use
+        if (msg.sender != owner) {
+            uint256 allowed = allowance[owner][msg.sender]; // Saves gas for limited approvals.
+            //if msg.sender not given infinite allowance, then take away withdraw amount of shares from allowed
+            if (allowed != type(uint256).max) allowance[owner][msg.sender] = allowed - shares;
+        }
+
+        _withdrawLpTkns(lpAmt);
+
+        beforeWithdraw(lpAmt, shares);
+        //burn shares of owner first before transferring
+        _burn(owner, shares);
+
+        emit Withdraw(msg.sender, receiver, owner, lpAmt, shares);
+
+        asset.safeTransfer(receiver, lpAmt);
+
     }
 
     function pendingRewardAmt() public view returns (uint) {
@@ -135,6 +179,11 @@ contract AutoCompound4626 is ERC4626 {
         stakingContract.deposit(PID, amount);
     }
 
+    function _withdrawLpTkns(uint amount) internal {
+        require(amount >0, "amount too low");
+        stakingContract.withdraw(PID, amount);
+    }
+
     function reinvest() external onlyOwner {
         uint unclaimedRewards = pendingRewardAmt();
         //can eventually put a require in that makes sure unclaimed rewards are certain amount before reinvested
@@ -149,7 +198,7 @@ contract AutoCompound4626 is ERC4626 {
         totalDeposits = 0;
     }
 
-    function recoverERC20(address tokenAddress, uint tokenAmount) external  {
+    function recoverERC20(address tokenAddress, uint tokenAmount) external onlyOwner {
         require(tokenAmount > 0, "amount too low");
         IERC20(tokenAddress).transfer(msg.sender, tokenAmount);
         emit Recovered(tokenAddress, tokenAmount);
