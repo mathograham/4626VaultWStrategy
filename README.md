@@ -11,6 +11,4 @@ Note these strategy and vault contracts are a work in progress. I am presently t
 
 Deployed from Remix onto Aurora Mainnet.
 
-AutoCompound4626 Address: 0x845d0baebef574dd6ef6a85e3f452cef9152b1f0
-
-[0x845d0baebef574dd6ef6a85e3f452cef9152b1f0](https://aurorascan.dev/address/0x845d0baebef574dd6ef6a85e3f452cef9152b1f0)
+AutoCompound4626 Address: [0x845d0baebef574dd6ef6a85e3f452cef9152b1f0](https://aurorascan.dev/address/0x845d0baebef574dd6ef6a85e3f452cef9152b1f0)
